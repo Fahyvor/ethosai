@@ -1,0 +1,83 @@
+// Prisma Schema for ETHOSAI AI Governance & Ethics Assessment Platform
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String        @id @default(uuid())
+  name         String
+  email        String        @unique
+  password     String
+  organization String?
+  role         String        @default("assessor")
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  aiSystems    AISystem[]
+  assessments  Assessment[]
+  reports      Report[]
+}
+
+model AISystem {
+  id                      String        @id @default(uuid())
+  name                    String
+  description             String
+  purpose                 String
+  domain                  String
+  deploymentContext       String
+  dataTypesUsed           String        @default("[]")
+  isAutonomous            Boolean       @default(false)
+  humanOversightLevel     String        @default("moderate")
+  trainingDataDescription String?
+  vendor                  String?
+  registeredById          String
+  registeredBy            User          @relation(fields: [registeredById], references: [id], onDelete: Cascade)
+  riskCategory            String?
+  status                  String        @default("registered")
+  createdAt               DateTime      @default(now())
+  updatedAt               DateTime      @updatedAt
+
+  assessments             Assessment[]
+}
+
+model Assessment {
+  id                   String      @id @default(uuid())
+  aiSystemId           String
+  aiSystem             AISystem    @relation(fields: [aiSystemId], references: [id], onDelete: Cascade)
+  assessorId           String
+  assessor             User        @relation(fields: [assessorId], references: [id], onDelete: Cascade)
+  status               String      @default("in_progress")
+  transparencyScore    Float       @default(0)
+  biasScore            Float       @default(0)
+  privacyScore         Float       @default(0)
+  humanOversightScore  Float       @default(0)
+  dataQualityScore     Float       @default(0)
+  overallRiskScore     Float       @default(0)
+  riskLevel            String      @default("minimal")
+  findings             String      @default("[]")
+  recommendations      String      @default("[]")
+  regulatoryReferences String      @default("[]")
+  assessmentData       String      @default("{}")
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+
+  reports              Report[]
+}
+
+model Report {
+  id            String      @id @default(uuid())
+  assessmentId  String
+  assessment    Assessment  @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  generatedById String
+  generatedBy   User        @relation(fields: [generatedById], references: [id], onDelete: Cascade)
+  title         String
+  pdfPath       String?
+  status        String      @default("generating")
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
