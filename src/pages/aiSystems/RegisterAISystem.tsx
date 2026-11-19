@@ -4,7 +4,7 @@ import { toast } from 'sleek-toast';
 import api from '../../lib/api';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
-import { Cpu, ArrowLeft } from '../../components/ui/Icons';
+import { ArrowLeft } from '../../components/ui/Icons';
 
 export const RegisterAISystem: React.FC = () => {
   const navigate = useNavigate();

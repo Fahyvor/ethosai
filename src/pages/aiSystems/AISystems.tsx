@@ -6,7 +6,7 @@ import { AISystem } from '../../types';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { RiskBadge, StatusBadge } from '../../components/ui/Badge';
-import { Cpu, Plus, Search, FileCheck, AlertTriangle } from '../../components/ui/Icons';
+import { Cpu, Plus, Search, FileCheck } from '../../components/ui/Icons';
 
 export const AISystems: React.FC = () => {
   const [systems, setSystems] = useState<AISystem[]>([]);

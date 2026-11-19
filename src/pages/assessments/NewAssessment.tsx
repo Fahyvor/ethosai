@@ -7,7 +7,6 @@ import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { RiskBadge } from '../../components/ui/Badge';
 import {
-  FileCheck,
   Scale,
   Eye,
   Shield,

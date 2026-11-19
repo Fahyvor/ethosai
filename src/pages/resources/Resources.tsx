@@ -3,7 +3,7 @@ import { toast } from 'sleek-toast';
 import api from '../../lib/api';
 import { RegulatoryResource } from '../../types';
 import { Card } from '../../components/ui/Card';
-import { BookOpen, Search, Scale, Shield, ExternalLink } from '../../components/ui/Icons';
+import { BookOpen, Search } from '../../components/ui/Icons';
 
 export const Resources: React.FC = () => {
   const [resources, setResources] = useState<RegulatoryResource[]>([]);

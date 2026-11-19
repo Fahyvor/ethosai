@@ -5,7 +5,7 @@ import api from '../../lib/api';
 import { ReportItem } from '../../types';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
-import { FileText, Download, Plus, CheckCircle2 } from '../../components/ui/Icons';
+import { FileText, Download, Plus } from '../../components/ui/Icons';
 
 export const Reports: React.FC = () => {
   const [reports, setReports] = useState<ReportItem[]>([]);

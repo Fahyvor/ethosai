@@ -5,7 +5,7 @@ import api from '../../lib/api';
 import { Assessment } from '../../types';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
-import { RiskBadge, StatusBadge } from '../../components/ui/Badge';
+import { RiskBadge } from '../../components/ui/Badge';
 import { RiskGauge } from '../../components/ui/RiskGauge';
 import {
   FileText,
