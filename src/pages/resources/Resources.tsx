@@ -89,7 +89,7 @@ export const Resources: React.FC = () => {
             type="text"
             placeholder="Search article, keyword, topic..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
             className="w-full bg-slate-900 border border-slate-800 rounded-lg pl-9 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500"
           />
         </div>
@@ -108,7 +108,7 @@ export const Resources: React.FC = () => {
         </Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {filtered.map((r) => {
+          {filtered.map((r: RegulatoryResource) => {
             const isEu = r.category === 'eu_ai_act';
             return (
               <Card key={r.id} className="flex flex-col justify-between hover:border-slate-700 transition-colors">

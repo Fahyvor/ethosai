@@ -1,6 +1,6 @@
-declare module 'sleek-toast' {
-  import React from 'react';
+import type * as React from 'react';
 
+declare module 'sleek-toast' {
   export interface ToastAPI {
     success: (message: string, duration?: number) => void;
     error: (message: string, duration?: number) => void;
