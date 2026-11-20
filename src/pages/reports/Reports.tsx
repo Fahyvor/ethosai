@@ -50,68 +50,73 @@ export const Reports: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#1c222e]">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Audit Reports & PDF Exports</h1>
-          <p className="text-sm text-slate-400 mt-1">
-            Certifications, executive summaries, and formal compliance declarations
+          <div className="text-[10px] font-mono tracking-widest text-blue-400 uppercase mb-1">
+            ARCHIVE // ARTICLE 11 TECHNICAL DOCUMENTATION
+          </div>
+          <h1 className="text-xl md:text-2xl font-bold text-white tracking-tight">
+            Governance Certificates & Audit Dossiers
+          </h1>
+          <p className="text-xs text-slate-400 font-mono mt-1">
+            Formal EU AI Act technical conformity files, DPIA registers, and regulatory submissions.
           </p>
         </div>
         <Link to="/assessments">
-          <Button variant="primary" className="gap-2">
-            <Plus className="w-4 h-4" />
-            Generate From Assessment
+          <Button variant="primary" size="sm" className="gap-2 font-mono">
+            <Plus className="w-3.5 h-3.5" />
+            <span>Generate From Audit</span>
           </Button>
         </Link>
       </div>
 
       {loading ? (
-        <div className="py-16 text-center text-slate-400">
-          <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          Loading reports archive...
+        <div className="py-16 text-center text-xs font-mono text-slate-500">
+          [QUERYING CERTIFICATE ARCHIVES...]
         </div>
       ) : reports.length === 0 ? (
-        <Card className="py-16 text-center text-slate-500 space-y-4">
-          <FileText className="w-12 h-12 mx-auto text-slate-700" />
-          <div>
-            <h3 className="text-base font-semibold text-slate-300">No Reports Generated Yet</h3>
-            <p className="text-xs text-slate-400 mt-1">
-              Complete an assessment and click "Export Official PDF" to generate formal audit records.
-            </p>
-          </div>
+        <Card className="py-16 text-center text-slate-500 space-y-4 font-mono text-xs">
+          <FileText className="w-10 h-10 mx-auto text-slate-700" />
+          <div>NO COMPILED PDF DOSSIERS IN ARCHIVE.</div>
           <Link to="/assessments">
-            <Button variant="primary" size="sm">Browse Assessments</Button>
+            <Button variant="primary" size="sm">
+              Inspect Completed Audits
+            </Button>
           </Link>
         </Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {reports.map((r) => (
-            <Card key={r._id} className="flex flex-col justify-between hover:border-slate-700 transition-colors">
+            <Card
+              key={r._id}
+              tag="CERTIFIED PDF"
+              className="flex flex-col justify-between hover:border-[#2b3548] transition-colors"
+            >
               <div>
                 <div className="flex items-start justify-between gap-2 mb-2">
-                  <div className="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0">
-                    <FileText className="w-5 h-5" />
-                  </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-                    Ready
+                  <span className="text-[10px] font-mono text-slate-500 uppercase tracking-wider">
+                    REF: {r._id.substring(0, 10).toUpperCase()}
+                  </span>
+                  <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-[3px] bg-emerald-950/40 text-emerald-300 border border-emerald-800/50">
+                    VERIFIED // READY
                   </span>
                 </div>
-                <h3 className="text-base font-bold text-white mb-1">{r.title}</h3>
-                <p className="text-xs text-slate-400">
-                  Created: {new Date(r.createdAt).toLocaleString()}
+                <h3 className="text-sm font-bold text-white mb-1.5 tracking-tight">{r.title}</h3>
+                <p className="text-[11px] font-mono text-slate-400">
+                  COMPILED ON: {new Date(r.createdAt).toLocaleString()}
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-slate-800 mt-4 flex items-center justify-between gap-3">
-                <span className="text-xs text-slate-500 font-mono">Format: PDF (A4)</span>
+              <div className="pt-3.5 border-t border-[#181d28] flex items-center justify-between gap-3 mt-4">
                 <Button
+                  variant="primary"
                   size="sm"
-                  variant="outline"
                   onClick={() => handleDownload(r._id, r.title)}
-                  className="gap-1.5 text-xs text-emerald-400 hover:text-emerald-300"
+                  className="gap-1.5 text-xs font-mono"
                 >
                   <Download className="w-3.5 h-3.5" />
-                  Download PDF
+                  <span>Download Signed PDF</span>
                 </Button>
               </div>
             </Card>

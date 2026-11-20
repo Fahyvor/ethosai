@@ -3,17 +3,14 @@ import { Link } from 'react-router-dom';
 import { toast } from 'sleek-toast';
 import api from '../../lib/api';
 import { Assessment } from '../../types';
-import { Card } from '../../components/ui/Card';
+import { Card, CardHeader } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { RiskBadge } from '../../components/ui/Badge';
 import {
-  ShieldAlert,
   Cpu,
-  FileCheck,
   Scale,
   Plus,
   ArrowRight,
-  BookOpen,
 } from '../../components/ui/Icons';
 
 interface DashboardStats {
@@ -41,7 +38,7 @@ export const Dashboard: React.FC = () => {
         setRecentAssessments(assessRes.data.slice(0, 5));
       } catch (err: any) {
         console.error('Dashboard load error:', err);
-        toast.error('Failed to load dashboard metrics');
+        toast.error('Failed to load compliance metrics');
       } finally {
         setLoading(false);
       }
@@ -55,217 +52,266 @@ export const Dashboard: React.FC = () => {
   };
 
   const highAndUnacceptable = getRiskCount('high') + getRiskCount('unacceptable');
+  const avgScore = stats?.avgRiskScore ?? 0;
 
   return (
-    <div className="space-y-8">
-      {/* Hero Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="space-y-6">
+      {/* Cockpit Executive Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-[#1c222e]">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
-            AI Governance & Ethics Dashboard
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-[10px] font-mono tracking-widest text-blue-400 uppercase bg-blue-950/40 px-2 py-0.5 border border-blue-800/50 rounded-[3px]">
+              AUDIT TERMINAL // LIVE REGISTER
+            </span>
+            <span className="text-xs text-slate-500 font-mono">SYS-ID: ETHOS-EU-NG</span>
+          </div>
+          <h1 className="text-xl md:text-2xl font-bold text-white tracking-tight">
+            AI Governance & Statutory Compliance Cockpit
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
-            Real-time compliance monitoring under the EU AI Act (2024) and Nigeria Data Protection Act (NDPA 2023)
+          <p className="text-xs text-slate-400 mt-1">
+            Conformity management system under EU AI Act (Regulation 2024/1689) and Nigeria Data Protection Act (NDPA 2023).
           </p>
         </div>
-        <div className="flex items-center gap-3">
+
+        <div className="flex items-center gap-2.5">
           <Link to="/ai-systems">
-            <Button variant="outline" size="sm" className="gap-1.5">
-              <Cpu className="w-4 h-4" />
-              Manage Systems
+            <Button variant="outline" size="sm" className="gap-1.5 font-mono">
+              <Cpu className="w-3.5 h-3.5 text-slate-400" />
+              <span>Systems Registry</span>
             </Button>
           </Link>
           <Link to="/assessments/new">
-            <Button variant="primary" size="sm" className="gap-1.5">
-              <Plus className="w-4 h-4" />
-              Run Assessment
+            <Button variant="primary" size="sm" className="gap-1.5 font-mono">
+              <Plus className="w-3.5 h-3.5" />
+              <span>Execute Audit</span>
             </Button>
           </Link>
         </div>
       </div>
 
-      {/* Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center shrink-0">
-            <Cpu className="w-6 h-6" />
+      {/* Architectural Ledger Strip (High Density Metrics) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="bg-[#0e1117] border border-[#1d2331] rounded-[5px] p-4 relative overflow-hidden">
+          <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500 mb-1">
+            01 // INVENTORY ASSETS
           </div>
-          <div>
-            <div className="text-2xl font-bold text-white">{stats?.totalSystems ?? 0}</div>
-            <div className="text-xs text-slate-400 font-medium">Registered AI Systems</div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-3xl font-mono font-bold text-white tracking-tight">
+              {stats?.totalSystems ?? 0}
+            </span>
+            <span className="text-xs text-slate-400">Deployed Models</span>
           </div>
-        </Card>
+          <div className="mt-3 pt-2 border-t border-[#181d27] flex items-center justify-between text-[11px] text-slate-400 font-mono">
+            <span>AUDIT COVERAGE:</span>
+            <span className="text-blue-400">
+              {stats?.totalSystems ? Math.round(((stats.totalAssessments || 0) / stats.totalSystems) * 100) : 0}%
+            </span>
+          </div>
+        </div>
 
-        <Card className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center shrink-0">
-            <FileCheck className="w-6 h-6" />
+        <div className="bg-[#0e1117] border border-[#1d2331] rounded-[5px] p-4 relative overflow-hidden">
+          <div className="text-[10px] font-mono uppercase tracking-wider text-amber-400/80 mb-1">
+            02 // ANNEX III HIGH-RISK
           </div>
-          <div>
-            <div className="text-2xl font-bold text-white">{stats?.totalAssessments ?? 0}</div>
-            <div className="text-xs text-slate-400 font-medium">Assessments Conducted</div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-3xl font-mono font-bold text-amber-400 tracking-tight">
+              {highAndUnacceptable}
+            </span>
+            <span className="text-xs text-slate-400">Strict Conformity</span>
           </div>
-        </Card>
+          <div className="mt-3 pt-2 border-t border-[#181d27] flex items-center justify-between text-[11px] text-slate-400 font-mono">
+            <span>EU ART. 6 THRESHOLD:</span>
+            <span className="text-amber-400 font-bold">{highAndUnacceptable > 0 ? 'ALERT' : 'NOMINAL'}</span>
+          </div>
+        </div>
 
-        <Card className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20 flex items-center justify-center shrink-0">
-            <ShieldAlert className="w-6 h-6" />
+        <div className="bg-[#0e1117] border border-[#1d2331] rounded-[5px] p-4 relative overflow-hidden">
+          <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500 mb-1">
+            03 // VERIFIED AUDITS
           </div>
-          <div>
-            <div className="text-2xl font-bold text-white">{highAndUnacceptable}</div>
-            <div className="text-xs text-slate-400 font-medium">High / Prohibited Risks</div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-3xl font-mono font-bold text-white tracking-tight">
+              {stats?.completedAssessments ?? 0}
+            </span>
+            <span className="text-xs text-slate-400">Certified Ledgers</span>
           </div>
-        </Card>
+          <div className="mt-3 pt-2 border-t border-[#181d27] flex items-center justify-between text-[11px] text-slate-400 font-mono">
+            <span>AUDITOR SIGN-OFF:</span>
+            <span className="text-emerald-400">ACTIVE</span>
+          </div>
+        </div>
 
-        <Card className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-teal-500/10 text-teal-400 border border-teal-500/20 flex items-center justify-center shrink-0">
-            <Scale className="w-6 h-6" />
+        <div className="bg-[#0e1117] border border-[#1d2331] rounded-[5px] p-4 relative overflow-hidden">
+          <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500 mb-1">
+            04 // COMPOSITE RISK INDEX
           </div>
-          <div>
-            <div className="text-2xl font-bold text-white">{stats?.avgRiskScore ?? 0}<span className="text-xs text-slate-400 font-normal"> / 100</span></div>
-            <div className="text-xs text-slate-400 font-medium">Avg Risk Index</div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-3xl font-mono font-bold tracking-tight text-white">
+              {avgScore}
+            </span>
+            <span className="text-xs font-mono text-slate-500">/ 100</span>
           </div>
-        </Card>
+          <div className="mt-3 pt-2 border-t border-[#181d27] flex items-center justify-between text-[11px] text-slate-400 font-mono">
+            <span>MEAN CLASSIFICATION:</span>
+            <span className={avgScore >= 60 ? 'text-amber-400' : 'text-emerald-400'}>
+              {avgScore >= 60 ? 'HIGH RISK' : avgScore >= 30 ? 'LIMITED' : 'MINIMAL'}
+            </span>
+          </div>
+        </div>
       </div>
 
-      {/* Framework Summary Banner */}
+      {/* Main Grid: Audit Ledger (Left) + Statutory Distribution (Right) */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2">
-          <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
-            <div>
-              <h3 className="text-base font-semibold text-white">Risk Classification Breakdown</h3>
-              <p className="text-xs text-slate-400">EU AI Act Tier Distribution</p>
-            </div>
-            <span className="text-xs text-slate-500">Based on active assessments</span>
-          </div>
+        {/* Left 2 Cols: Statutory Audit Registry */}
+        <div className="lg:col-span-2 space-y-4">
+          <Card tag="RECORD: AUDIT-LOG">
+            <CardHeader
+              title="Recent Statutory Audit Determinations"
+              subtitle="Formal risk assessments executed against Annex III high-risk employment, health, biometric, and finance criteria."
+              action={
+                <Link to="/assessments" className="text-xs font-mono text-blue-400 hover:text-blue-300 flex items-center gap-1">
+                  <span>Full Ledger</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              }
+            />
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
-            <div className="p-3.5 rounded-lg bg-emerald-500/5 border border-emerald-500/20">
-              <span className="text-xs font-semibold text-emerald-400 block">Minimal Risk</span>
-              <span className="text-2xl font-extrabold text-white mt-1 block">{getRiskCount('minimal')}</span>
-              <span className="text-[11px] text-slate-400">Permitted / No Barrier</span>
-            </div>
-
-            <div className="p-3.5 rounded-lg bg-sky-500/5 border border-sky-500/20">
-              <span className="text-xs font-semibold text-sky-400 block">Limited Risk</span>
-              <span className="text-2xl font-extrabold text-white mt-1 block">{getRiskCount('limited')}</span>
-              <span className="text-[11px] text-slate-400">Transparency Obligation</span>
-            </div>
-
-            <div className="p-3.5 rounded-lg bg-amber-500/5 border border-amber-500/20">
-              <span className="text-xs font-semibold text-amber-400 block">High Risk</span>
-              <span className="text-2xl font-extrabold text-white mt-1 block">{getRiskCount('high')}</span>
-              <span className="text-[11px] text-slate-400">Conformity Assessment</span>
-            </div>
-
-            <div className="p-3.5 rounded-lg bg-rose-500/5 border border-rose-500/20">
-              <span className="text-xs font-semibold text-rose-400 block">Unacceptable</span>
-              <span className="text-2xl font-extrabold text-white mt-1 block">{getRiskCount('unacceptable')}</span>
-              <span className="text-[11px] text-slate-400">Prohibited (Art. 5)</span>
-            </div>
-          </div>
-        </Card>
-
-        {/* Regulatory Spotlight */}
-        <Card className="flex flex-col justify-between">
-          <div>
-            <div className="flex items-center gap-2 text-emerald-400 mb-2">
-              <BookOpen className="w-5 h-5" />
-              <h3 className="font-semibold text-white text-base">Regulatory Frameworks</h3>
-            </div>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              ETHOSAI continuously cross-references your assessment results against Articles 5, 6, 9, 10, 13, 14 of the EU AI Act and Sections 24, 30 of NDPA 2023.
-            </p>
-          </div>
-
-          <div className="mt-4 pt-4 border-t border-slate-800">
-            <Link to="/resources">
-              <Button variant="outline" size="sm" className="w-full gap-2 text-xs">
-                Explore Legal References
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Button>
-            </Link>
-          </div>
-        </Card>
-      </div>
-
-      {/* Recent Assessments Table */}
-      <Card>
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
-          <div>
-            <h3 className="text-base font-semibold text-white">Recent AI Assessments</h3>
-            <p className="text-xs text-slate-400">Latest governance reviews and risk scores</p>
-          </div>
-          <Link to="/assessments">
-            <Button variant="ghost" size="sm" className="text-xs gap-1">
-              View All
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Button>
-          </Link>
+            {loading ? (
+              <div className="py-12 text-center text-xs font-mono text-slate-500">
+                [RETRIEVING AUDIT VERIFICATIONS...]
+              </div>
+            ) : recentAssessments.length === 0 ? (
+              <div className="py-12 text-center text-slate-500 font-mono text-xs">
+                NO AUDIT RECORDS LOGGED IN CURRENT SESSION.
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs font-mono">
+                  <thead>
+                    <tr className="text-slate-400 border-b border-[#1c222e] text-[10px] tracking-wider uppercase">
+                      <th className="pb-2.5 font-medium">System Nomenclature</th>
+                      <th className="pb-2.5 font-medium">Domain</th>
+                      <th className="pb-2.5 font-medium">Score</th>
+                      <th className="pb-2.5 font-medium">Statutory Tier</th>
+                      <th className="pb-2.5 font-medium text-right">Inspect</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#151922]">
+                    {recentAssessments.map((a) => (
+                      <tr key={a._id} className="hover:bg-[#12161f] transition-colors group">
+                        <td className="py-3 pr-3">
+                          <div className="font-semibold text-slate-200 group-hover:text-blue-400 transition-colors">
+                            {a.aiSystemId?.name || 'Unnamed Model'}
+                          </div>
+                          <div className="text-[10px] text-slate-400">
+                            ID: {a._id.substring(0, 8)}... // {new Date(a.createdAt).toLocaleDateString()}
+                          </div>
+                        </td>
+                        <td className="py-3 px-2">
+                          <span className="text-[10px] uppercase px-1.5 py-0.5 bg-[#141822] border border-[#222938] rounded text-slate-300">
+                            {a.aiSystemId?.domain || 'General'}
+                          </span>
+                        </td>
+                        <td className="py-3 px-2 font-bold text-slate-200">
+                          {a.overallRiskScore}
+                          <span className="text-[10px] text-slate-400 font-normal">/100</span>
+                        </td>
+                        <td className="py-3 px-2">
+                          <RiskBadge level={a.riskLevel} />
+                        </td>
+                        <td className="py-3 pl-2 text-right">
+                          <Link
+                            to={`/assessments/${a._id}`}
+                            className="inline-flex items-center gap-1 px-2 py-1 bg-[#151922] hover:bg-blue-600 hover:text-white text-slate-300 border border-[#273042] rounded-[3px] text-[10px] font-semibold transition-all"
+                          >
+                            <span>Certificate</span>
+                            <ArrowRight className="w-2.5 h-2.5" />
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </Card>
         </div>
 
-        {loading ? (
-          <div className="py-8 text-center text-slate-400 text-sm">
-            <div className="w-6 h-6 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
-            Loading assessments...
-          </div>
-        ) : recentAssessments.length === 0 ? (
-          <div className="py-12 text-center text-slate-500 space-y-3">
-            <FileCheck className="w-10 h-10 mx-auto text-slate-600" />
-            <p className="text-sm">No assessments recorded yet.</p>
-            <Link to="/assessments/new">
-              <Button size="sm" variant="primary">Start Your First Assessment</Button>
-            </Link>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="text-[11px] uppercase tracking-wider text-slate-400 border-b border-slate-800">
-                <tr>
-                  <th className="pb-3 font-semibold">AI System</th>
-                  <th className="pb-3 font-semibold">Domain</th>
-                  <th className="pb-3 font-semibold">Risk Classification</th>
-                  <th className="pb-3 font-semibold">Risk Score</th>
-                  <th className="pb-3 font-semibold">Date</th>
-                  <th className="pb-3 font-semibold text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-800/60">
-                {recentAssessments.map((a) => {
-                  const sys = typeof a.aiSystemId === 'object' ? a.aiSystemId : null;
-                  return (
-                    <tr key={a._id} className="hover:bg-slate-800/30 transition-colors">
-                      <td className="py-3.5 font-medium text-white">
-                        {sys?.name || 'AI System'}
-                      </td>
-                      <td className="py-3.5 text-xs text-slate-400 capitalize">
-                        {sys?.domain || 'General'}
-                      </td>
-                      <td className="py-3.5">
-                        <RiskBadge level={a.riskLevel} />
-                      </td>
-                      <td className="py-3.5 font-mono text-sm font-semibold">
-                        <span className={a.overallRiskScore >= 60 ? 'text-amber-400' : 'text-emerald-400'}>
-                          {a.overallRiskScore} / 100
-                        </span>
-                      </td>
-                      <td className="py-3.5 text-xs text-slate-400">
-                        {new Date(a.createdAt).toLocaleDateString()}
-                      </td>
-                      <td className="py-3.5 text-right">
-                        <Link to={`/assessments/${a._id}`}>
-                          <Button variant="outline" size="sm" className="text-xs">
-                            View Report
-                          </Button>
-                        </Link>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </Card>
+        {/* Right 1 Col: Statutory Tiers Breakdown & Framework Matrix */}
+        <div className="space-y-4">
+          <Card tag="STATUTE: BREAKDOWN">
+            <CardHeader
+              title="EU AI Act Risk Matrix"
+              subtitle="Statutory distribution across the four tiers of Regulation 2024/1689."
+            />
+
+            <div className="space-y-3 font-mono text-xs">
+              {/* Unacceptable */}
+              <div className="p-3 bg-[#130f14] border border-rose-950/60 rounded-[4px]">
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-[11px] font-bold text-rose-400 uppercase">Article 5 // Prohibited</span>
+                  <span className="text-sm font-bold text-rose-300">{getRiskCount('unacceptable')}</span>
+                </div>
+                <p className="text-[10px] text-slate-400 leading-tight">
+                  Exploitative manipulation, social scoring, untargeted facial scraping.
+                </p>
+              </div>
+
+              {/* High Risk */}
+              <div className="p-3 bg-[#14120e] border border-amber-950/60 rounded-[4px]">
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-[11px] font-bold text-amber-400 uppercase">Article 6 // High Risk (Annex III)</span>
+                  <span className="text-sm font-bold text-amber-300">{getRiskCount('high')}</span>
+                </div>
+                <p className="text-[10px] text-slate-400 leading-tight">
+                  Critical infrastructure, biometric triage, employment screening, credit scoring.
+                </p>
+              </div>
+
+              {/* Limited */}
+              <div className="p-3 bg-[#0d141c] border border-sky-950/60 rounded-[4px]">
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-[11px] font-bold text-sky-400 uppercase">Article 50 // Limited Risk</span>
+                  <span className="text-sm font-bold text-sky-300">{getRiskCount('limited')}</span>
+                </div>
+                <p className="text-[10px] text-slate-400 leading-tight">
+                  Chatbots, synthetic media generators, emotion recognition systems.
+                </p>
+              </div>
+
+              {/* Minimal */}
+              <div className="p-3 bg-[#0c1410] border border-emerald-950/60 rounded-[4px]">
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-[11px] font-bold text-emerald-400 uppercase">Voluntary // Minimal Risk</span>
+                  <span className="text-sm font-bold text-emerald-300">{getRiskCount('minimal')}</span>
+                </div>
+                <p className="text-[10px] text-slate-400 leading-tight">
+                  AI spam filters, video games, inventory routing.
+                </p>
+              </div>
+            </div>
+
+            {/* NDPA Cross-Check Section */}
+            <div className="mt-4 pt-3 border-t border-[#1a202c]">
+              <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-300 font-bold uppercase mb-1.5">
+                <Scale className="w-3.5 h-3.5 text-blue-400" />
+                <span>NDPA 2023 Cross-Border Audit Checklist</span>
+              </div>
+              <ul className="text-[11px] space-y-1 text-slate-400 font-mono">
+                <li className="flex items-center gap-2">
+                  <span className="text-emerald-400">✓</span> Part III: Lawful Processing Base Documented
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-emerald-400">✓</span> Sec. 24: Data Subject Recourse Protocol
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-emerald-400">✓</span> Sec. 30: DPIA Register Enforced for High Risk
+                </li>
+              </ul>
+            </div>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 };

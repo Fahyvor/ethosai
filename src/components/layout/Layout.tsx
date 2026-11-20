@@ -4,7 +4,7 @@ import { Sidebar } from './Sidebar';
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+    <div className="min-h-screen bg-[#090b0e] text-[#f3f5f8] flex flex-col">
       <Navbar />
       <div className="flex flex-1">
         <Sidebar />
